@@ -1,0 +1,39 @@
+# This workflows will upload a Python Package using Twine when a release is created
+# For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
+
+name: Upload Python Package
+
+on:
+  push:
+    branches: 
+      - master
+    paths: 'timbermill-python/**'
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install setuptools wheel twine bump2version
+    - name: Build and publish
+      env:
+        TWINE_USERNAME: '__token__'
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_KEY }}
+      run: |
+        bump2version patch timbermill-python/setup.py --config-file timbermill-python/.bumpversion.cfg
+        python setup.py sdist bdist_wheel
+        twine upload dist/*
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: master
