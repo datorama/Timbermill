@@ -17,7 +17,7 @@
         <java.source-target.version>1.8</java.source-target.version>
         <timbermill.version>2.4.2</timbermill.version>
         <aspectj.version>1.9.6</aspectj.version>
-        <org.springframework.version>5.3.4</org.springframework.version>
+        <org.springframework.version>5.3.5</org.springframework.version>
     </properties>
 
     <licenses>
